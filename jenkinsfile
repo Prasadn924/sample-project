@@ -20,7 +20,7 @@ pipeline {
 
         stage('Deploy to Tomcat') {
             steps {
-                sh "cp /var/lib/jenkins/workspace/Maven-project/fresherswalkins/target/fresherwalkins.war ${TOMCAT_HOME}/webapps/"
+                sh "cp /var/lib/jenkins/workspace/Maven-project/target/districtsApplication-0.0.1-SNAPSHOT.war ${TOMCAT_HOME}/webapps/"
             }
         }
 
