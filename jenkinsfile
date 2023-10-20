@@ -1,0 +1,35 @@
+pipeline {
+    agent any
+    environment {
+        PATH = "/opt/apache-maven-3.9.5/bin:$PATH"
+        TOMCAT_HOME = '/opt/tomcat'
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Build code') {
+            steps {
+                sh "mvn -f pom.xml clean install"
+            }
+        }
+
+        stage('Deploy to Tomcat') {
+            steps {
+                sh "cp /var/lib/jenkins/workspace/Maven-project/fresherswalkins/target/fresherwalkins.war ${TOMCAT_HOME}/webapps/"
+            }
+        }
+
+        stage('Restart Tomcat') {
+            steps {
+                sh "${TOMCAT_HOME}/bin/shutdown.sh"
+                sleep 10 // Wait for Tomcat to stop gracefully
+                sh "sudo /opt/tomcat/bin/startup.sh"
+            }
+        }
+    }
+}
